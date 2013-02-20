@@ -1,16 +1,17 @@
 <?php
-error_reporting(0);
-/**
- * 
- * Place <?php if (function_exists('printCartPrice')) { ?><?php printCartPrice(); ?><?php  } ?> in your theme's image.php file where you want it to appear.
- 
- 
- *	Place in the index or header <?php if (function_exists('printCartWidget')) { ?><?php printCartWidget(); ?><?php  } ?>
- *
- * 
-  *a very simple but smart shopping cart  
+/*
+ * Simple shopping cart for Zenphoto CMS 
  * @package plugins
+ * (c) Joseph Philbert
+ *
+ * @package zenphoto.plugin.zensimplecart
+ * Place the "code" in your theme's image.php file where you want it to appear.
+ * <?php if (function_exists('printCartPrice')) { ?><?php printCartPrice(); ?><?php  } ?>
+ *
+ * Place in the themes index.php,inc_header.php, inc_menu.php, etc where you want your cart widget to display.
+ * <?php if (function_exists('printCartWidget')) { ?><?php printCartWidget(); ?><?php  } ?>
  */
+
 
 $plugin_is_filter = 2;
 $plugin_description = gettext("Adds SimpleCart fuctions to ZenPhoto.");
