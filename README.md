@@ -17,26 +17,8 @@ Place this anywhere in your theme's image.php file where you want the CART to ap
 Place in the index or header in your theme's image.php where ever you want the CART add widget to appear.
 <?php if (function_exists('printCartWidget')) { ?><?php printCartWidget(); ?><?php } ?>
 
-Pricing can be set per Album or per image in the "custom Codeblock" section(image are load first if any)
-FORMAT separate price from description with ";" and separate each section with "|" .
+Pricing can be set added in "Album" or "Image" in "Custom Codeblock" section(image codeblocks are loaded first) 
+FORMAT separate price from description with ";" and separate each section with "|" you can use 
+carriage return after ever "|".
 
-Accepted samples
-49.00;8x10 |99.00;12x16 |300.00;16x20 |1000.00;100 cm x 80
------------
-49.00;8x10
-|99.00;12x16
-|300.00;16x20
-|1000.00;100 cm x 80
------------
-49.00;8x10|
-99.00;12x16|
-300.00;16x20|
-1000.00;100 cm x 80
-
-49.00;8x10|
-
-99.00;12x16|
-
-300.00;16x20|
-
-1000.00;100 cm x 80
+49.00;8x10 matte|99.00;12x16 gloss |300.00;16x20 black and white |1000.00;100 cm x 80 poster
