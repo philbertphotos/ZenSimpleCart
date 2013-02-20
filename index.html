@@ -1,51 +1,85 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Zensimplecart by philbertphotos</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
     <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
+    <title>Zensimplecart by philbertphotos</title>
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/philbertphotos/ZenSimpleCart">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/philbertphotos/ZenSimpleCart/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/philbertphotos/ZenSimpleCart/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <div id="container">
+      <div class="inner">
 
-    <div class="wrapper">
-
-      <section>
-        <div id="title">
+        <header>
           <h1>Zensimplecart</h1>
-          <p>Zenphoto shopping cart plugin </p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/philbertphotos">philbertphotos</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
-        </div>
+          <h2>Zenphoto shopping cart plugin </h2>
+        </header>
 
-        <p>Welcome ZenSimpleCart.
-Integrates a shopping basket/cart into Zenphoto CMS that uses "simplecart.js" which allows you to turn your gallery into a shop for selling your images.  More options coming soon. (Updating Google Wallet and Amazon Check out stay tuned) </p>
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/philbertphotos/ZenSimpleCart/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/philbertphotos/ZenSimpleCart/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/philbertphotos/ZenSimpleCart" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
 
-<pre><code></code></pre>
-      </section>
+        <hr>
 
+        <section id="main_content">
+          <h1>
+<img src="http://www.mricons.com/store/png/119563_37149_32_ecommerce_shopping%20cart_webshop_icon.png" alt="ZenSimpleCat">ZenSimpleCart</h1>
+
+<p>Integrates a shopping basket/cart into Zenphoto CMS that uses Simplecart.js which allows you to turn your gallery into a shop for selling your images.  </p>
+
+<h2>More options coming soon. (Updating Google Wallet and Amazon Check out stay tuned) </h2>
+
+<p>Installation Instructions
+Unzip files and upload the 'yourzenphotoinstalltion/plugins' folder.
+Go to plugins&gt;ZenSimpleCart and set your paypal email.</p>
+
+<p>After installation
+Place this anywhere in your theme's image.php file where you want the CART to appear.
+<code>&lt;?php if (function_exists('printCartPrice')) { ?&gt;&lt;?php printCartPrice(); ?&gt;&lt;?php } ?&gt;</code></p>
+
+<p>Place in the index or header in your theme's image.php where ever you want the CART add widget to appear.
+<code>&lt;?php if (function_exists('printCartWidget')) { ?&gt;&lt;?php printCartWidget(); ?&gt;&lt;?php } ?&gt;</code></p>
+
+<p>Pricing can be set per Album or per image in the "custom Codeblock" section(image are load first if any)
+FORMAT separate price from description with ";" and separate each section with "|" .</p>
+
+<hr><p>Accepted samples</p>
+
+<h2>`49.00;8x10 |99.00;12x16 |300.00;16x20 |1000.00;100 cm x 80</h2>
+
+<p>49.00;8x10
+|99.00;12x16
+|300.00;16x20</p>
+
+<h2>|1000.00;100 cm x 80</h2>
+
+<p>49.00;8x10|
+99.00;12x16|
+300.00;16x20|
+1000.00;100 cm x 80</p>
+
+<p>49.00;8x10|
+99.00;12x16|
+300.00;16x20|
+1000.00;100 cm x 80`</p>
+        </section>
+
+        <footer>
+          Zensimplecart is maintained by <a href="https://github.com/philbertphotos">philbertphotos</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
   </body>
 </html>
