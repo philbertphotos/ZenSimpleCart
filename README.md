@@ -1,16 +1,15 @@
 ZenSimpleCart
 =============
 
-Integrates a shopping basket/cart into Zenphoto CMS that uses Simplecart.js which allows you to turn your gallery into a shop for selling your images.  
-More options coming soon. (Updating Google Wallet and Amazon Check out stay tuned) 
+Integrates a shopping basket/cart into Zenphoto CMS that uses Simplecart.js which allows you to turn your 
+gallery into a shop for selling your images. More options coming soon. 
+(Updating Google Wallet and Amazon Check out stay tuned) 
 --------------
 Installation Instructions
 Unzip files and upload the 'yourzenphotoinstalltion/plugins' folder.
 Go to plugins>ZenSimpleCart and set your paypal email.
 
-
 After installation
-
 Place this anywhere in your theme's image.php file where you want the CART to appear.
 <?php if (function_exists('printCartPrice')) { ?><?php printCartPrice(); ?><?php } ?>
 
