@@ -1,4 +1,11 @@
 <?php
+/*
+ * Simple shopping cart for Zenphoto CMS 
+ * @package plugins
+ * (c) Joseph Philbert
+ * @package zenphoto.plugin.zensimplecart
+*/
+
 class zensimplecart {
 	
 	private $custom_datas;
