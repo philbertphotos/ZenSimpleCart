@@ -1,27 +1,3 @@
-/*
-* Simple shopping cart for Zenphoto CMS
-* @package plugins
-* (c) Joseph Philbert
-* @package zenphoto.plugin.zensimplecart
-*/
-
-        /* ---------------------------------------------------------------------- */
-	/*	Ajax Minicart
-	/* ---------------------------------------------------------------------- */
-
-		$('#cart .arrow').live('mouseover', function() {
-
-			$('#cart').addClass('active');
-			
-			//$('#cart').load('#cart > *');
-
-			$('#cart > .cartcontent').slideToggle('fast');
-			
-			$('#cart').live('mouseleave', function() {
-				$(this).removeClass('active');
-			});
-			
-		});
 	/* ---------------------------------------------------------------------- */
 	/*	Cart image Fly in
 	/* ---------------------------------------------------------------------- */
@@ -40,17 +16,19 @@
                     });
                 });
             });
- document.getElementById('basket').style.display = "";
 	/* ---------------------------------------------------------------------- */
 	/*	Cart Popup
 	/* ---------------------------------------------------------------------- */	
-    //$(".inline").colorbox({inline:true, width:"90%"});
-$(document).ready(function () {
-    $("a[rel^='cartpop']").colorbox({inline:true, width:"80%", height:"80%"});
-	$("a[rel^='inlinetest']").colorbox({inline:true, width:"80%", height:"80%"});
-	$(".inline").colorbox({inline:true, width:"50%"});
-});
-
+$('#cart > .heading a').live('click', function() {
+	
+		$('#cart .content').slideDown(400);
+		$('#cart').addClass('active');
+		$('#cart').live('mouseleave', function() {
+			$('#cart .content').slideUp(200, function(){
+				$(this).removeClass('active');
+			});
+		});
+	});
 
 	
 /* ---------------------------------------------------------------------- */
@@ -60,10 +38,10 @@ $(document).ready(function () {
 	$("document").ready(function(){
    
         $("#priceselect").change(function(){
+		//$("#descselect").change(function(){
     
-          //$("#priceshow").append("<span>" + $(this).val() + " </span>");
-		  $("#priceshow").text ("$" + ($(this).val()));
-          
+		  $("#pricedesc").text ($('#priceselect option:selected').text());
+		  $("#priceshow").text ("$" + ($(this).val())); 
         });    
     });
 	/* ---------------------------------------------------------------------- */
