@@ -1,11 +1,11 @@
 <?php
 /**
  * 
- * Place <?php if (function_exists('printCartPrice')) { ?><?php printCartPrice(); ?><?php  } ?> in your theme's image.php file where you want it to appear.
- 
- 
- *	Place in the index or header <?php if (function_exists('printCartWidget')) { ?><?php printCartWidget(); ?><?php  } ?>
+ *	Place <?php if (function_exists('printCartPrice')) { ?><?php printCartPrice(); ?><?php  } ?> in your theme's image.php file where you want it to appear.
  *
+ *	Place in the index or header <?php if (function_exists('printCartWidget')) { ?><?php printCartWidget(); ?><?php  } ?>
+ *	
+ *	Place under an image or anywhere you want a add button (optional) <?php if (function_exists('printAddWidget')) { ?><?php printAddWidget(); ?><?php  } ?>
  * 
   *a very simple but smart shopping cart  
  * @package plugins
@@ -68,32 +68,11 @@ class ZenSimpleCartOptions {
 		);
 	}
 }
-
-
-
-
 /*shippingFlatRate, 
 shippingQuantityRate, 
 shippingTotalRate.  
 shippingCustom*/
 
-
-/*function getNewFileName($filename, $dir) {
-   if (is_file("$dir/$filename")) {
-       if (strpos($filename, "_") === false) {
-           $filename = str_replace(".xml","_1.xml",$filename);
-           return getNewFileName($filename, $dir);
-       }
-       else {
-               $pos = strpos($filename, "_");
-               $counter = (int)substr($filename, $pos+1,1);
-               $counter++;
-               $filename = substr($filename,0, $pos)."_".$counter.".xml";
-               return getNewFileName($filename, $dir);
-       }
-    }
-    return (string)$filename;
-}*
 /**
 	* Parses a price list element string and returns a pricelist array
 	* 
@@ -115,7 +94,7 @@ shippingCustom*/
 				
 				$price_list['price'][$i] = $x[0];
 				$price_list['desc'][$i] = $x[1];
-				//$price_list['price'][$i] = $x[0];			
+				//$price_list['price'][$i] = $x[0];	//TODO		
 				$i++;
 			
 				//unset($x);
@@ -125,42 +104,6 @@ shippingCustom*/
 		//unset($array);
 		return $price_list;		
 	}	
-
-function printCartPrice() {
-global $_zp_current_album,$_zp_current_image;
-$file_name = pathinfo($_zp_current_image->getFilename(), PATHINFO_FILENAME);
-
-if ($_zp_current_album->getCodeblock()) {
-$getcodeblock =($_zp_current_album->getCodeblock());
-$codeblock = unserialize($getcodeblock);
-@eval('/>'.$codeblock[$number]);
-foreach ($codeblock as $value) {
-$pricelist = explode("|", $value);
-echo '<div class="zensimpleprice">';
-echo "<div class='simpleCart_shelfItem'>";
-echo "<div class='item_name' style='display:none'>".$file_name."</div>";
-echo "<div id='pricedesc' class='item_description'style='display:none'>test</div>"; //DESCRIPTION TODO
-echo "<div><h1 id='priceshow'>$0</h1></div>"; //Show price TODO add option pricing
-echo "<div class='selectitems'>";
-	//create selection values
-echo '<select id="priceselect" class="item_price">';
-echo "<option value='0'>choose option</option>";
-for ($i = 0; $i < count(getPriceList($value)['price']); ++$i) {
-echo "<option value='".getPriceList($value)['price'][$i]."'>";
-echo getPriceList($value)['desc'][$i]."</option>";
-}
-echo "</select> <br /> </div>";    
-echo "<div class='item_thumb'>".printCustomSizedImage(null, 150, 150)."</div>";
-echo "<p><input type='button' class='item_add button button_accent addProduct' value='Add to cart' /></p>";
-echo "</div>";
-echo "</div>";
-/*   Array Test 
-$json = json_encode($datadesc);
-    $phpStringArray = str_replace(array("{","}",":"), array("array(","}","=>"), $json);
-    echo $phpStringArray;*/           
-} 
-}
-} 	
 
 function ZenSimpleCartHead() { 
 ?>
@@ -190,11 +133,8 @@ function ZenSimpleCartHead() {
 	currency: "<?php echo getOption('zensimplecart_currency'); ?>",
     },
     });
-	
-	
-    </script>
- 
-<script>
+	</script>
+ <script>
 	simpleCart({
 		//Setting the Cart Columns for the sidebar cart display.
 		cartColumns: [
@@ -202,8 +142,8 @@ function ZenSimpleCartHead() {
 			{ view: function(item, column){
 				return	"<span>"+item.get('quantity')+"</span>" + 
 						"<div>" +
-							"<a href='javascript:;' class='simpleCart_increment'><img src='<?php echo WEBPATH.'/'.USER_PLUGIN_FOLDER; ?>/ZenSimpleCart/images/increment.png' title='+1' alt='arrow up'/></a>" +
-							"<a href='javascript:;' class='simpleCart_decrement'><img src='<?php echo WEBPATH.'/'.USER_PLUGIN_FOLDER; ?>/ZenSimpleCart/images/decrement.png' title='-1' alt='arrow down'/></a>" +
+							"<a href='javascript:;' class='simpleCart_increment tooltip_t' title='increase quantity''><img src='<?php echo WEBPATH.'/'.USER_PLUGIN_FOLDER; ?>/ZenSimpleCart/images/increment.png' title='increase quantity' alt='arrow up'/></a>" +
+							"<a href='javascript:;' class='simpleCart_decrement tooltip_t' title='decrease quantity'><img src='<?php echo WEBPATH.'/'.USER_PLUGIN_FOLDER; ?>/ZenSimpleCart/images/decrement.png' title='decrease quantity' alt='arrow down'/></a>" +
 						"</div>";
 			}, attr: 'custom' },
 			//Name of the item
@@ -219,30 +159,32 @@ function ZenSimpleCartHead() {
 
 	<?php
 }
-
+function printAddWidget() { 
+?>
+<!--Start printAddWidget--> 
+<? global $_zp_current_album,$_zp_current_image;
+$file_name = pathinfo($_zp_current_image->getFilename(), PATHINFO_FILENAME);
+?>
+<div class="item_name" style="display:none"><?php echo $file_name; ?></div>
+<div class="additem"><a href="javascript:;" class="item_add addProduct button button_accent">Add Item</a></div>
+<!--END printAddWidget -->	 
+ <?php } 
+ 
 function printCartWidget() { ?>
 <!--Start printCartWidget -->
- <div id="cart">
+ <div id="cart" style="display:none">
   <div class="heading">
-	<a id="basket" title="Shopping Cart" href="#"> 
+	<a id="basket" class="tooltip_l" title="Shopping Cart" href="#"> 
 	<span>
     <i></i><i class="simpleCart_quantity"> </i><i>-items Shopping Cart</i></span></a></div>
   <div class="content shadow">
-       <div class="mini-cart-info">
-	   
-<?php 		
-$scitems = '<script type="text/javascript">simpleCart.quantity()</script>';
-echo $scitems;
-if ( $scitems == 0 ) { ?>
-<div class="simpleCart_items"><h1> Your shopping cart is empty!</h1></div>
-<?php } else { ?>
-<div class="simpleCart_items">
-<div class="item-custom"></div>
-<div class="item-name"></div>
-<div class="item-total"></div>
+<div class="mini-cart-info">
+	   <div class="simpleCart_items">
+	<div class="item-custom"></div>
+	<div class="item-name tooltip_b"></div>
+	<div class="item-total"></div>
 </div>
-<?php } ?>
-    </div>
+</div>
 <div class="mini-cart-total">
 <div class="iconcart"> </div>
 	<div align="right"><b>Postage:</b><span class="simpleCart_shipping">0</span></div></br>
@@ -252,9 +194,53 @@ if ( $scitems == 0 ) { ?>
 <div class="checkout"><a href="javascript:;" class="simpleCart_empty button button_accent">Empty Cart</a>
 <a class="simpleCart_checkout button" href="javascript:;">Checkout</a>   </div>
     <div class="cart-arrow"></div>
- 
 </div>
 </div>
 <!--END printCartWidget -->	 
  <?php } 
+
+function printCartPrice() {
+global $_zp_current_album,$_zp_current_image;
+$file_name = pathinfo($_zp_current_image->getFilename(), PATHINFO_FILENAME);
+
+if (getImageTitle() == $file_name) {
+} else {
+$file_name = $file_name ." (" . getImageTitle().")";
+}
+
+if ($_zp_current_album->getCodeblock()) {
+$getcodeblock =($_zp_current_album->getCodeblock());
+$codeblock = unserialize($getcodeblock);
+@eval('/>'.$codeblock[$number]);
+foreach ($codeblock as $value) {
+$pricelist = explode("|", $value);
+?>
+<div class="zensimpleprice">
+<div class="simpleCart_shelfItem">
+<div class="item_name" style="display:none"><?php echo $file_name; ?></div>
+<div id="pricedesc" class="item_description" style="display:none"></div> <!--DESCRIPTION TODO-->
+<div><h1 id="priceshow">$0</h1></div> <!--Show price TODO add option pricing-->
+<div class="selectitems">
+	<!--create selection values-->
+<select id="priceselect" class="item_price">
+<option value="0">choose option</option>
+<?php for ($i = 0; $i < count(getPriceList($value)["price"]); ++$i) {
+$price = getPriceList($value)["price"][$i];
+$desc = getPriceList($value)["desc"][$i]; 
+?>
+<option value="<?php echo $price; ?>"><?php echo $desc; ?></option>
+<?php } ?>
+</select> <br /> </div>
+<div class="item_thumb"><?php printCustomSizedImage(null, 150, 150); ?></div>
+<p><input type="button" class="item_add button button_accent addProduct" value="Add to cart" /></p>
+</div>
+</div>
+<!--   Array Test 
+$json = json_encode($datadesc);
+    $phpStringArray = str_replace(array("{","}",":"), array("array(","}","=>"), $json);
+    echo $phpStringArray;-->       
+<?php	
+} 
+}
+} 		
 ?>
