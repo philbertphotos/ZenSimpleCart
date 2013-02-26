@@ -20,7 +20,6 @@
 	/*	Cart Popup
 	/* ---------------------------------------------------------------------- */	
 $('#cart > .heading a').live('click', function() {
-	
 		$('#cart .content').slideDown(400);
 		$('#cart').addClass('active');
 		$('#cart').live('mouseleave', function() {
@@ -30,16 +29,20 @@ $('#cart > .heading a').live('click', function() {
 		});
 	});
 
-	
+//Hide until page finish loading.
+$(document).ready(function() {
+      //$('#cart').hide();
+	  $('#cart').toggle();
+});
+
+
 /* ---------------------------------------------------------------------- */
-	/* Select Dropbox
+	/* Set Cart options for checkout
 	/* ---------------------------------------------------------------------- */	
 
 	$("document").ready(function(){
    
-        $("#priceselect").change(function(){
-		//$("#descselect").change(function(){
-    
+          $("#priceselect").change(function(){
 		  $("#pricedesc").text ($('#priceselect option:selected').text());
 		  $("#priceshow").text ("$" + ($(this).val())); 
         });    
@@ -51,7 +54,7 @@ $('#cart > .heading a').live('click', function() {
 	/*Call TipTip Tooltip*/
 $(function(){
 $("a.tooltip_r").tipTip({maxWidth: "auto",defaultPosition:"right"});
-$("a.tooltip_t").tipTip({maxWidth: "auto",defaultPosition:"top",edgeOffset: 40});
-$("a.tooltip_l").tipTip({maxWidth: "auto",defaultPosition:"left"});
+$(".tooltip_t").tipTip({maxWidth: "auto",defaultPosition:"top"});
+$(".tooltip_l").tipTip({maxWidth: "auto",defaultPosition:"left"});
 $("a.tooltip_b").tipTip({maxWidth: "auto"});
 });
