@@ -240,10 +240,7 @@ $desc = getPriceList($value)["desc"][$i];
 <div id="info_box">
   <div id="lightbox_close"></div>
 <div id="content">
-<span style="text-align: center;">
 <div class="paymentlogo"></div>
-</div>
-</span>
 <div style="text-align: center;">
 <h2>Please wait, your order is being processed and you will be redirected to the PayPal website.</h2>
 </div>
