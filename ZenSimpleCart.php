@@ -15,7 +15,7 @@ $plugin_is_filter = 2;
 $plugin_description = gettext("Adds SimpleCart fuctions to ZenPhoto.");
 
 $plugin_author = "Joseph Philbert";
-$plugin_version = '1.3';
+$plugin_version = '1.5';
 $plugin_URL = 'http://www.philbertphotography.com/';
 $option_interface = 'ZenSimpleCartOptions';
 
@@ -235,6 +235,22 @@ $desc = getPriceList($value)["desc"][$i];
 <p><input type="button" class="item_add button button_accent addProduct" value="Add to cart" /></p>
 </div>
 </div>
+
+<!-- Pseudo User Information Box -->
+<div id="info_box">
+  <div id="lightbox_close"></div>
+<div id="content">
+<span style="text-align: center;">
+<div class="paymentlogo"></div>
+</div>
+</span>
+<div style="text-align: center;">
+<h2>Please wait, your order is being processed and you will be redirected to the PayPal website.</h2>
+</div>
+</div>
+</div>
+<div id="info_box_shadow"></div>
+<a id="lightbox_open" href="#" style="display:hidden"></a>
 <!--   Array Test 
 $json = json_encode($datadesc);
     $phpStringArray = str_replace(array("{","}",":"), array("array(","}","=>"), $json);
