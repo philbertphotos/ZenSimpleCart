@@ -16,7 +16,7 @@ $plugin_description = gettext("Adds SimpleCart fuctions to ZenPhoto.");
 
 $plugin_author = "Joseph Philbert";
 $plugin_version = '1.5';
-$plugin_URL = 'http://www.philbertphotography.com/';
+$plugin_URL = 'http://philbertphotos.github.com/ZenSimpleCart';
 $option_interface = 'ZenSimpleCartOptions';
 
 if (version_compare(ZENPHOTO_VERSION,'1.4.0') < 0) {
