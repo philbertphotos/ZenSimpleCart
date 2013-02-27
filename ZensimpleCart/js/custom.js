@@ -31,7 +31,6 @@ $('#cart > .heading a').live('click', function() {
 
 //Hide until page finish loading.
 $(document).ready(function() {
-      //$('#cart').hide();
 	  $('#cart').toggle();
 });
 
@@ -58,3 +57,26 @@ $(".tooltip_t").tipTip({maxWidth: "auto",defaultPosition:"top"});
 $(".tooltip_l").tipTip({maxWidth: "auto",defaultPosition:"left"});
 $("a.tooltip_b").tipTip({maxWidth: "auto"});
 });
+	/* ---------------------------------------------------------------------- */
+	/* SimpleCart Actions
+	/* ---------------------------------------------------------------------- */	
+$(document).ready( function(){
+simpleCart.bind( 'beforeCheckout' , function( data ){
+        $("#lightbox_open").click();
+});
+});
+               /* b.fadeOut(function () {
+                    d.fadeIn(500, function () {
+                        setTimeout(function () {
+                            c.removeAttr("disabled"), $("#user-wrapper form").submit(), c.attr("disabled", "disabled")
+                        }, 1200)
+                    })
+                })*/
+$("#lightbox_close").live("click", function () {
+	$("#info_box").fadeOut("fast"), $("#info_box_shadow").removeClass("display")
+});
+
+$("#lightbox_open").live("click", function () {
+$("#info_box").fadeIn("fast"), $("#info_box_shadow").addClass("display"), close_and_callback = function () {
+       }, $("#info_box_shadow, #info_box #lightbox_close").unbind("click").bind("click", close_and_callback)
+});	
