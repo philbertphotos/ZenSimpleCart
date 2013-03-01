@@ -11,23 +11,16 @@
  * @package plugins
  */
 
-$plugin_is_filter = 2;
-$plugin_description = gettext("Adds SimpleCart fuctions to ZenPhoto.");
+$plugin_is_filter = 9|THEME_PLUGIN;
 
 $plugin_author = "Joseph Philbert";
-$plugin_version = '1.5';
+$plugin_version = '1.8';
 $plugin_URL = 'http://philbertphotos.github.com/ZenSimpleCart';
+$plugin_description = gettext("Integrates a shopping basket/cart into Zenphoto CMS that uses Simplecart.js which allows you to turn your gallery into a shop for selling your images.");
+
 $option_interface = 'ZenSimpleCartOptions';
 
-if (version_compare(ZENPHOTO_VERSION,'1.4.0') < 0) {
-ob_start();
-ZenSimpleCartHead();
-$str = ob_get_contents();
-ob_end_clean();
-addPluginScript($str);
-} else {
 zp_register_filter('theme_head','ZenSimpleCartHead');
-}
 
 /**
  * Plugin option handling class
@@ -198,18 +191,63 @@ function printCartWidget() { ?>
 </div>
 <!--END printCartWidget -->	 
  <?php } 
+ 
+function getCompleteCodeblock($number=0) {
+	global $_zp_current_album, $_zp_current_image, $_zp_current_zenpage_news, $_zp_current_zenpage_page, $_zp_gallery, $_zp_gallery_page;
+	$getcodeblock = NULL;
+	if ($_zp_gallery_page == 'index.php') {
+		$getcodeblock = $_zp_gallery->getCodeblock();
+	}
+	if (in_context(ZP_ALBUM)) {
+		$getcodeblock = $_zp_current_album->getCodeblock();
+	}
+	if (in_context(ZP_IMAGE)) {
+		$getcodeblock = $_zp_current_image->getCodeblock();
+	}
+	if (in_context(ZP_ZENPAGE_PAGE)) {
+		if ($_zp_current_zenpage_page->checkAccess()) {
+			$getcodeblock = $_zp_current_zenpage_page->getCodeblock();
+		} else {
+			$getcodeblock = NULL;
+		}
+	}
+	if (in_context(ZP_ZENPAGE_NEWS_ARTICLE)) {
+		if ($_zp_current_zenpage_news->checkAccess()) {
+			$getcodeblock = $_zp_current_zenpage_news->getCodeblock();
+		} else {
+			$getcodeblock = NULL;
+		}
+	}
+	if (empty($getcodeblock)) {
+		return NULL;
+	}
+	$codeblock = unserialize($getcodeblock);
+	return $codeblock[$number];
+}
 
 function printCartPrice() {
-global $_zp_current_album,$_zp_current_image;
+global $_zp_gallery,$_zp_current_album,$_zp_current_image;
 $file_name = pathinfo($_zp_current_image->getFilename(), PATHINFO_FILENAME);
-
 if (getImageTitle() == $file_name) {
 } else {
 $file_name = $file_name ." (" . getImageTitle().")";
 }
 
-if ($_zp_current_album->getCodeblock()) {
-$getcodeblock =($_zp_current_album->getCodeblock());
+//Loop through code blocks in order image, album then gallery for price listing
+$codearray = array(($_zp_current_image->getCodeblock()), ($_zp_current_album->getCodeblock()), ($_zp_gallery->getCodeblock()));
+$value = "a:0:{}";
+$valid = true;
+
+foreach($codearray as $element) {
+if ($element == $value) {
+} else {
+//echo $element;
+$getcodeblock  = $element; //Load code block
+break; //found the first codeblock
+}
+}
+
+if ($getcodeblock) {
 $codeblock = unserialize($getcodeblock);
 @eval('/>'.$codeblock[$number]);
 foreach ($codeblock as $value) {
@@ -222,7 +260,7 @@ $pricelist = explode("|", $value);
 <div><h1 id="priceshow">$0</h1></div> <!--Show price TODO add option pricing-->
 <div class="selectitems">
 	<!--create selection values-->
-<select id="priceselect" class="item_price">
+<select id="priceselect" class="item_price" onchange="getinfo()">
 <option value="0">choose option</option>
 <?php for ($i = 0; $i < count(getPriceList($value)["price"]); ++$i) {
 $price = getPriceList($value)["price"][$i];
