@@ -38,7 +38,10 @@ $(document).ready(function() {
 /* ---------------------------------------------------------------------- */
 	/* Set Cart options for checkout
 	/* ---------------------------------------------------------------------- */	
+function getinfo()
+{
 
+} 
 	$("document").ready(function(){
    
           $("#priceselect").change(function(){
