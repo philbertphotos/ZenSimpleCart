@@ -27,7 +27,19 @@ zp_register_filter('theme_head','ZenSimpleCartHead');
  *
  */
 class ZenSimpleCartOptions {
-
+  /**
+* Handles custom formatting of options for Admin
+*
+* @param string $option the option name of the option to be processed
+* @param mixed $currentValue the current value of the option (the "before" value)
+*/
+function handleOption($option, $currentValue) {
+if (getOption('zensimplecart_checkout') == "PayPal") {
+echo 'Enter your paypal email address';
+} elseif (getOption('zensimplecart_checkout') == "GoogleCheckout") {
+echo 'Enter your google Info email address';
+}
+}
 	function ZenSimpleCartOptions() {
 		setOptionDefault('zensimplecart_email', 'none@none.com');
 		setOptionDefault('zensimplecart_checkout', '');
@@ -57,10 +69,15 @@ class ZenSimpleCartOptions {
 			'order'=>0,
 			'selections' => array(gettext('US Dollar') => 'USD', gettext('Australian Dollar') => 'AUD', gettext('Brazilian Real') => 'BRL', gettext('Canadian Dollar') => 'CAD',gettext('Czech Koruna') => 'CZK',gettext('Danish Krone') => 'DKK',gettext('Euro') => 'EUR',gettext('Hong Kong Dollar') => 'HKD',gettext('Hungarian Forint') => 'HUF',gettext('Japanese Yen') => 'JPY',gettext('Mexican Peso') => 'MXN',gettext('Swiss Franc') => 'CHF'),
 	        'desc' => gettext('Select the currency type')),
+				gettext('SpamAssassin ctype') => array('key' => 'SpamAssassin_ctype', 'type' => '2' , 'desc' => gettext('Connection type')),
+
+			
 		
 		);
 	}
 }
+
+
 /*shippingFlatRate, 
 shippingQuantityRate, 
 shippingTotalRate.  
@@ -225,6 +242,59 @@ function getCompleteCodeblock($number=0) {
 	return $codeblock[$number];
 }
 
+	function handleOption($key, $cv) {
+		$imageurl = getOption('text_watermark_text');
+		if (!empty($imageurl)) {
+			$imageurl = '<img src="'.FULLWEBPATH.'//plugins/text_watermark/createwatermark.php'.
+										'?text_watermark_text='.$imageurl.
+										'&amp;text_watermark_font='.rawurlencode(getOption('text_watermark_font')).
+										'&amp;text_watermark_color='.rawurlencode(getOption('text_watermark_color')).
+										'&amp;transient" alt="" />';
+		}
+		?>
+		<script type="text/javascript">
+			// <!-- <![CDATA[
+			$(document).ready(function() {
+				$('#text_watermark_font').change(function(){
+					updatewm();
+				});
+				$('#text_watermark_color').change(function(){
+					updatewm();
+				});
+				$('#text_watermark_color_colorpicker').change(function(){
+					updatewm();
+				});
+				$('#text_watermark_text').change(function(){
+					updatewm();
+				});
+			});
+			function imgsrc() {
+				var imgsrc = '<?php echo FULLWEBPATH; ?>/plugins/text_watermark/createwatermark.php'
+								+'?text_watermark_text='+encodeURIComponent($('#text_watermark_text').val())
+								+'&amp;text_watermark_font='+encodeURIComponent($('#text_watermark_font').val())
+								+'&amp;text_watermark_color='+encodeURIComponent($('#text_watermark_color').val());
+				return imgsrc;
+			}
+			function updatewm() {
+				$('#text_watermark_image_loc').html('<img src="'+imgsrc()+'&amp;transient" alt="" />');
+			}
+			function createwm() {
+				$.ajax({
+					cache: false,
+					type: 'GET',
+					url: imgsrc()
+				});
+				alert('<?php echo gettext('watermark created'); ?>');
+			}
+			// ]]> -->
+		</script>
+		<p class="buttons">
+			<span id="text_watermark_image_loc"><?php echo $imageurl ?></span>
+			<button type="button" title="<?php echo gettext('Create'); ?>" onclick="javascript:createwm();"><strong><?php echo gettext('Create'); ?></strong></button>
+		</p>
+		<?php
+	}
+
 function printCartPrice() {
 global $_zp_gallery,$_zp_current_album,$_zp_current_image;
 $file_name = pathinfo($_zp_current_image->getFilename(), PATHINFO_FILENAME);
@@ -237,11 +307,10 @@ $file_name = $file_name ." (" . getImageTitle().")";
 $codearray = array(($_zp_current_image->getCodeblock()), ($_zp_current_album->getCodeblock()), ($_zp_gallery->getCodeblock()));
 $value = "a:0:{}";
 $valid = true;
-
 foreach($codearray as $element) {
-if ($element == $value) {
+if ($element == $value || (empty($element))){
+//echo "not code";
 } else {
-//echo $element;
 $getcodeblock  = $element; //Load code block
 break; //found the first codeblock
 }
@@ -252,6 +321,7 @@ $codeblock = unserialize($getcodeblock);
 @eval('/>'.$codeblock[$number]);
 foreach ($codeblock as $value) {
 $pricelist = explode("|", $value);
+//echo $getcodeblock; 
 ?>
 <div class="zensimpleprice">
 <div class="simpleCart_shelfItem">
