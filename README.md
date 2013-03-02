@@ -21,3 +21,7 @@ FORMAT separate price from description with ";" and separate each section with "
 carriage return after ever "|".
 
 49.00;8x10 matte|99.00;12x16 gloss |300.00;16x20 black and white |1000.00;100 cm x 80 poster
+
+Credits:
+Flyin animation script by by John
+http://outbottle.com/jquery-fly-to-basket-and-fly-from-basket/
