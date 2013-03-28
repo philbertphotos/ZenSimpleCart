@@ -1,27 +1,28 @@
 <?php
 /**
  * 
+ *	Place in the index or header.php <?php if (function_exists('printCartWidget')) { ?><?php printCartWidget(); ?><?php  } ?>
+ *	
  *	Place <?php if (function_exists('printCartPrice')) { ?><?php printCartPrice(); ?><?php  } ?> in your theme's image.php file where you want it to appear.
  *
- *	Place in the index or header <?php if (function_exists('printCartWidget')) { ?><?php printCartWidget(); ?><?php  } ?>
- *	
- *	Place under an image or anywhere you want a add button (optional) <?php if (function_exists('printAddWidget')) { ?><?php printAddWidget(); ?><?php  } ?>
- * 
+ *	Place under an image or anywhere you want a add button (optional) <?php if (function_exists('printAddWidget')) { ?><?php printAddWidget(); ?><?php  } ?> TODO
+  *
+  * Example of pricing
+  *49.00;8x10 matte|99.00;12x16 gloss |300.00;16x20 black and white |1000.00;100 cm x 80 poster
   *a very simple but smart shopping cart  
- * @package plugins
- */
+  * @package plugins
+  */
 
 $plugin_is_filter = 9|THEME_PLUGIN;
 
 $plugin_author = "Joseph Philbert";
-$plugin_version = '1.8';
+$plugin_version = '1.9';
 $plugin_URL = 'http://philbertphotos.github.com/ZenSimpleCart';
 $plugin_description = gettext("Integrates a shopping basket/cart into Zenphoto CMS that uses Simplecart.js which allows you to turn your gallery into a shop for selling your images.");
 
 $option_interface = 'ZenSimpleCartOptions';
 
 zp_register_filter('theme_head','ZenSimpleCartHead');
-
 /**
  * Plugin option handling class
  *
@@ -39,10 +40,30 @@ echo 'Enter your paypal email address';
 } elseif (getOption('zensimplecart_checkout') == "GoogleCheckout") {
 echo 'Enter your google Info email address';
 }
+
+if ($option == 'zensimplecart_update') {
+			echo '<select style="width:200px;" id="' . $option . '" name="' . $option . '"' . ">\n";
+			
+			echo '<option value="dark"';
+				if ($currentValue == "dark") { 
+				echo ' selected="selected">dark</option>\n';
+				} else {
+				echo '>dark</option>\n';
+				}
+			
+			echo '<option value="light"';
+				if ($currentValue == "light") { 
+				echo ' selected="selected">light</option>\n';
+				} else {
+				echo '>light</option>\n';
+				}
+				
+			echo "</select>\n";
+		}
 }
 	function ZenSimpleCartOptions() {
 		setOptionDefault('zensimplecart_email', 'none@none.com');
-		setOptionDefault('zensimplecart_checkout', '');
+		setOptionDefault('zensimplecart_checkout', 'PayPal');
 		setOptionDefault('zensimplecart_currency', 'USD');
 		setOptionDefault('zensimplecart_css', 'lightcart.css');
 	}
@@ -68,11 +89,7 @@ echo 'Enter your google Info email address';
 	gettext('Currency') => array('key' => 'zensimplecart_currency', 'type' => OPTION_TYPE_SELECTOR,
 			'order'=>0,
 			'selections' => array(gettext('US Dollar') => 'USD', gettext('Australian Dollar') => 'AUD', gettext('Brazilian Real') => 'BRL', gettext('Canadian Dollar') => 'CAD',gettext('Czech Koruna') => 'CZK',gettext('Danish Krone') => 'DKK',gettext('Euro') => 'EUR',gettext('Hong Kong Dollar') => 'HKD',gettext('Hungarian Forint') => 'HUF',gettext('Japanese Yen') => 'JPY',gettext('Mexican Peso') => 'MXN',gettext('Swiss Franc') => 'CHF'),
-	        'desc' => gettext('Select the currency type')),
-				gettext('SpamAssassin ctype') => array('key' => 'SpamAssassin_ctype', 'type' => '2' , 'desc' => gettext('Connection type')),
-
-			
-		
+	        'desc' => gettext('Select the currency type')),		
 		);
 	}
 }
@@ -295,9 +312,26 @@ function getCompleteCodeblock($number=0) {
 		<?php
 	}
 
+function catupdate () {	
+	$getVersions = file_get_contents('http://your-server.com/CMS-UPDATE-PACKAGES/current-release-versions.php') or die ('ERROR');
+if ($getVersions != '') {
+    //If we managed to access that file, then lets break up those release versions into an array.
+    echo '<p>CURRENT VERSION: '.get_siteInfo('CMS-Version').'</p>';
+    echo '<p>Reading Current Releases List</p>';
+    $versionList = explode("\\n", $getVersions);    
+    foreach ($versionList as $aV)
+    {
+        if ( $aV > get_siteInfo('CMS-Version')) {
+            echo '<p>New Update Found: v'.$aV.'</p>';
+}
+}
+}
+}
+			
 function printCartPrice() {
 global $_zp_gallery,$_zp_current_album,$_zp_current_image;
 $file_name = pathinfo($_zp_current_image->getFilename(), PATHINFO_FILENAME);
+$getcodeblock = "";
 if (getImageTitle() == $file_name) {
 } else {
 $file_name = $file_name ." (" . getImageTitle().")";
@@ -330,6 +364,7 @@ $pricelist = explode("|", $value);
 <div><h1 id="priceshow">$0</h1></div> <!--Show price TODO add option pricing-->
 <div class="selectitems">
 	<!--create selection values-->
+<div class="selectprice">	
 <select id="priceselect" class="item_price" onchange="getinfo()">
 <option value="0">choose option</option>
 <?php for ($i = 0; $i < count(getPriceList($value)["price"]); ++$i) {
@@ -338,8 +373,12 @@ $desc = getPriceList($value)["desc"][$i];
 ?>
 <option value="<?php echo $price; ?>"><?php echo $desc; ?></option>
 <?php } ?>
-</select> <br /> </div>
-<div class="item_thumb"><?php printCustomSizedImage(null, 150, 150); ?></div>
+</select></div> <br /> </div><!--
+void printCustomSizedImageMaxSpace( [string $alt = ''], int $width, int $height, [string $class = NULL], [string $id = NULL], [ $thumb = false]  )
+printCustomSizedImage(getImageTitle(), 150, 150, 150, 150, 150, 0, -10, null, null, false); <div class="item_thumb"><?php //printCustomSizedImage(getImageTitle(), 150, 150,null, null, null, null, getImageTitle(), null, false); ?></div>
+
+-->
+<?php printCustomSizedImageMaxSpace(getImageTitle(),150,150,$class='itemthumb'); ?>	
 <p><input type="button" class="item_add button button_accent addProduct" value="Add to cart" /></p>
 </div>
 </div>
