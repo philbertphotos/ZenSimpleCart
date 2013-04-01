@@ -16,7 +16,7 @@
 $plugin_is_filter = 9|THEME_PLUGIN;
 
 $plugin_author = "Joseph Philbert";
-$plugin_version = '1.9';
+$plugin_version = '1.9.1';
 $plugin_URL = 'http://philbertphotos.github.com/ZenSimpleCart';
 $plugin_description = gettext("Integrates a shopping basket/cart into Zenphoto CMS that uses Simplecart.js which allows you to turn your gallery into a shop for selling your images.");
 
@@ -361,15 +361,15 @@ $pricelist = explode("|", $value);
 <div class="simpleCart_shelfItem">
 <div class="item_name" style="display:none"><?php echo $file_name; ?></div>
 <div id="pricedesc" class="item_description" style="display:none"></div> <!--DESCRIPTION TODO-->
-<div><h1 id="priceshow">$0</h1></div> <!--Show price TODO add option pricing-->
+<div><h1 id="priceshow">$0</h1></div> <!--Show price TODO add option pricing-->  
 <div class="selectitems">
 	<!--create selection values-->
 <div class="selectprice">	
 <select id="priceselect" class="item_price" onchange="getinfo()">
 <option value="0">choose option</option>
-<?php for ($i = 0; $i < count(getPriceList($value)["price"]); ++$i) {
-$price = getPriceList($value)["price"][$i];
-$desc = getPriceList($value)["desc"][$i]; 
+<?php for ($i = 0; $i < count(getPriceList($value).'['."price". ']'); ++$i) {
+$price = getPriceList($value).'['."price". ']['.$i.']';  
+$price = getPriceList($value).'['."price". ']['.$i.']';
 ?>
 <option value="<?php echo $price; ?>"><?php echo $desc; ?></option>
 <?php } ?>
