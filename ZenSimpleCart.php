@@ -189,7 +189,7 @@ function ZenSimpleCartHead() {
 function printAddWidget() { 
 ?>
 <!--Start printAddWidget--> 
-<? global $_zp_current_album,$_zp_current_image;
+<?php global $_zp_current_album,$_zp_current_image;
 $file_name = pathinfo($_zp_current_image->getFilename(), PATHINFO_FILENAME);
 ?>
 <div class="item_name" style="display:none"><?php echo $file_name; ?></div>
