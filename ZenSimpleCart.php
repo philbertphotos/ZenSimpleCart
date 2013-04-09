@@ -1,22 +1,22 @@
 <?php
 /**
  * 
- *	Place in the index or header.php <?php if (function_exists('printCartWidget')) { ?><?php printCartWidget(); ?><?php  } ?>
+ *	Place in the index.php (or the file that loads theme header just after the <body> tag) <?php if (function_exists('printCartWidget')) { ?><?php printCartWidget(); ?><?php  } ?>
+*You may have to add this to multiple PHP files this depends on the theme 
  *	
  *	Place <?php if (function_exists('printCartPrice')) { ?><?php printCartPrice(); ?><?php  } ?> in your theme's image.php file where you want it to appear.
  *
- *	Place under an image or anywhere you want a add button (optional) <?php if (function_exists('printAddWidget')) { ?><?php printAddWidget(); ?><?php  } ?> TODO
-  *
-  * Example of pricing
-  *49.00;8x10 matte|99.00;12x16 gloss |300.00;16x20 black and white |1000.00;100 cm x 80 poster
-  *a very simple but smart shopping cart  
-  * @package plugins
-  */
+ *
+ * Example of pricing structure
+ *49.00;8x10 matte|99.00;12x16 gloss |300.00;16x20 black and white |1000.00;100 cm x 80 poster
+ *a very simple but smart shopping cart  
+ * @package plugins
+ */
 
 $plugin_is_filter = 9|THEME_PLUGIN;
 
 $plugin_author = "Joseph Philbert";
-$plugin_version = '1.9.1';
+$plugin_version = '2.1';
 $plugin_URL = 'http://philbertphotos.github.com/ZenSimpleCart';
 $plugin_description = gettext("Integrates a shopping basket/cart into Zenphoto CMS that uses Simplecart.js which allows you to turn your gallery into a shop for selling your images.");
 
@@ -64,36 +64,84 @@ if ($option == 'zensimplecart_update') {
 	function ZenSimpleCartOptions() {
 		setOptionDefault('zensimplecart_email', 'none@none.com');
 		setOptionDefault('zensimplecart_checkout', 'PayPal');
-		setOptionDefault('zensimplecart_currency', 'USD');
+		setOptionDefault('zensimplecart_layoutstyle', 0);
+		setOptionDefault('zensimplecart_asignature', '');
+		setOptionDefault('zensimplecart_aid', '');
+		setOptionDefault('zensimplecart_akey_id', '');
+		setOptionDefault('zensimplecart_gid', '');	
 		setOptionDefault('zensimplecart_css', 'lightcart.css');
 	}
 
 	function getOptionsSupported() {
-		return array(										
-	gettext('Paypal Email ') => array('key' => 'zensimplecart_email', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext("Enter your paypal email address.")),	
-										
-	gettext('Checkout Type ID') => array('key' => 'zensimplecart_checkout', 'type' => OPTION_TYPE_SELECTOR,
+		return array(															
+	gettext('Checkout Type') => array('key' => 'zensimplecart_checkout', 'type' => OPTION_TYPE_SELECTOR,
 										'order'=>0,
-										'selections' => array(gettext('PayPal') => 'PayPal', gettext('GoogleCheckout') => 'GoogleCheckout',gettext('Amazon Payments') => 'AmazonPayments'),
+										'selections' => array(
+										gettext('PayPal') => 'PayPal', 
+										gettext('GoogleCheckout') => 'GoogleCheckout',
+										gettext('Amazon Payments') => 'AmazonPayments'),
+										
 										'desc' => gettext('Choose a payment type.')),
 										
-	gettext('Style') => array('key' => 'zensimplecart_css', 'type' => OPTION_TYPE_SELECTOR, 
-				'order' => 1,
-				'selections' => array(gettext('dark') => 'darkcart.css', gettext('light') => 'lightcart.css'),
-				'desc' => gettext('Select a dark or light overall color style for your cart')),
-				
-	gettext(' Flat Shipping Rate') => array('key' => 'zensimplecart_flatship', 'type' => OPTION_TYPE_TEXTBOX,
-										'desc' => gettext("Enter your flatshiping rate")),
+	gettext('Layout Style') => array(
+										'key' => 'zensimplecart_layoutstyle',
+										'order'=>1,
+										'type' => 5,
+										'selections' => array(
+										gettext('Simple') => 0,
+										gettext('Standard') => 1,
+																),
+										'desc' => gettext('This will determine if you show the image and price vale or just an "add item" button')),
 										
-	gettext('Currency') => array('key' => 'zensimplecart_currency', 'type' => OPTION_TYPE_SELECTOR,
-			'order'=>0,
-			'selections' => array(gettext('US Dollar') => 'USD', gettext('Australian Dollar') => 'AUD', gettext('Brazilian Real') => 'BRL', gettext('Canadian Dollar') => 'CAD',gettext('Czech Koruna') => 'CZK',gettext('Danish Krone') => 'DKK',gettext('Euro') => 'EUR',gettext('Hong Kong Dollar') => 'HKD',gettext('Hungarian Forint') => 'HUF',gettext('Japanese Yen') => 'JPY',gettext('Mexican Peso') => 'MXN',gettext('Swiss Franc') => 'CHF'),
+	gettext('CSS Style') => array('key' => 'zensimplecart_css', 
+										'type' => OPTION_TYPE_SELECTOR, 
+										'order' => 3,
+										'selections' => array(gettext('dark') => 'darkcart.css', gettext('light') => 'lightcart.css'),
+										'desc' => gettext('Select a dark or light overall color style for your cart')),
+										
+	gettext('Paypal: Email ') => array('key' => 'zensimplecart_email','
+										order'=> 2, 
+										'type' => OPTION_TYPE_TEXTBOX,
+										'desc' => gettext("Enter your paypal email address.")),	
+										
+	gettext('Amazon: Merchant Signature') => array('key' => 'zensimplecart_asignature', 
+										'type' => OPTION_TYPE_TEXTBOX,
+										'desc' => gettext("Enter merchant Signature.")),
+	gettext('Amazon: ID') => array('key' => 'zensimplecart_aid', 
+										'type' => OPTION_TYPE_TEXTBOX,
+										'desc' => gettext("Enter your Amazon.")),										
+	gettext('Amazon: Access Key ID ') => array('key' => 'zensimplecart_akey_id', 
+										'type' => OPTION_TYPE_TEXTBOX,
+										'desc' => gettext("Enter your amazon access key ID.")),		
+	gettext('Google: Merchant ID') => array('key' => 'zensimplecart_gid', 
+										'type' => OPTION_TYPE_TEXTBOX,
+										'desc' => gettext("Enter your google merchant ID.")),	
+	
+	gettext('Currency') => array('key' => 'zensimplecart_currency', 
+										'type' => OPTION_TYPE_SELECTOR,
+										'order'=> 4,
+										'selections' => array(
+			gettext('US Dollar') => 'USD', 
+			gettext('Australian Dollar') => 'AUD', 
+			gettext('Brazilian Real') => 'BRL', 
+			gettext('Canadian Dollar') => 'CAD',
+			gettext('Czech Koruna') => 'CZK',
+			gettext('Danish Krone') => 'DKK',
+			gettext('Euro') => 'EUR',
+			gettext('Pound Sterling') => 'GBP',
+			gettext('Hong Kong Dollar') => 'HKD',
+			gettext('Hungarian Forint') => 'HUF',
+			gettext('Japanese Yen') => 'JPY',
+			gettext('Mexican Peso') => 'MXN',
+			gettext('Swiss Franc') => 'CHF',
+			gettext('Israeli New Sheqel') => 'ILS',
+			gettext('Thai Baht') => 'THB',
+			gettext('Bitcoin') => 'BTC'),
+			
 	        'desc' => gettext('Select the currency type')),		
 		);
 	}
 }
-
 
 /*shippingFlatRate, 
 shippingQuantityRate, 
@@ -101,10 +149,10 @@ shippingTotalRate.
 shippingCustom*/
 
 /**
-	* Parses a price list element string and returns a pricelist array
+	* Parses a price list element string and returns an array
 	* 
 	* @param string $prices A text string of price list elements in the form
-	*	<size>;<media>;<price>;<quantity>|<size>;<media>;<price>| ...
+	*	<price>;<description>|<price>;<description>|<price>;<description>|<price>;<description>|
 	* @return array
 	*/
 	 function getPriceList($prices) {
@@ -119,16 +167,13 @@ shippingCustom*/
 			
 				$x = explode(';', trim($value));
 				
-				$price_list['price'][$i] = $x[0];
-				$price_list['desc'][$i] = $x[1];
-				//$price_list['price'][$i] = $x[0];	//TODO		
+				$price_list['price'.$i] = $x[0];
+				$price_list['desc'.$i] = $x[1];
+				//$price_list['option'.$i] = $x[2];	//TODO
+				
 				$i++;
-			
-				//unset($x);
 			}
-			//unset($value);
 		}
-		//unset($array);
 		return $price_list;		
 	}	
 
@@ -157,6 +202,10 @@ function ZenSimpleCartHead() {
     checkout: {
     type: "<?php echo getOption('zensimplecart_checkout'); ?>",
     email: "<?php echo getOption('zensimplecart_email'); ?>",
+	marchantID: "<?php echo getOption('zensimplecart_gid'); ?>",
+	merchant_signature: "<?php echo getOption('zensimplecart_asignature'); ?>",
+	merchant_id: "<?php echo getOption('zensimplecart_aid'); ?>",
+	aws_access_key_id: "<?php echo getOption('zensimplecart_akey_id'); ?>",
 	currency: "<?php echo getOption('zensimplecart_currency'); ?>",
     },
     });
@@ -184,18 +233,7 @@ function ZenSimpleCartHead() {
 </script>
 
 
-	<?php
-}
-function printAddWidget() { 
-?>
-<!--Start printAddWidget--> 
-<?php global $_zp_current_album,$_zp_current_image;
-$file_name = pathinfo($_zp_current_image->getFilename(), PATHINFO_FILENAME);
-?>
-<div class="item_name" style="display:none"><?php echo $file_name; ?></div>
-<div class="additem"><a href="javascript:;" class="item_add addProduct button button_accent">Add Item</a></div>
-<!--END printAddWidget -->	 
- <?php } 
+	<?php }
  
 function printCartWidget() { ?>
 <!--Start printCartWidget -->
@@ -327,7 +365,7 @@ if ($getVersions != '') {
 }
 }
 }
-			
+
 function printCartPrice() {
 global $_zp_gallery,$_zp_current_album,$_zp_current_image;
 $file_name = pathinfo($_zp_current_image->getFilename(), PATHINFO_FILENAME);
@@ -336,51 +374,93 @@ if (getImageTitle() == $file_name) {
 } else {
 $file_name = $file_name ." (" . getImageTitle().")";
 }
-
+function is_serialized( $data ) {
+        // if it isn't a string, it isn't serialized
+        if ( !is_string( $data ) )
+            return false;
+        $data = trim( $data );
+        if ( 'N;' == $data )
+            return true;
+        if ( !preg_match( '/^([adObis]):/', $data, $badions ) )
+            return false;
+        switch ( $badions[1] ) {
+            case 'a' :
+            case 'O' :
+            case 's' :
+                if ( preg_match( "/^{$badions[1]}:[0-9]+:.*[;}]\$/s", $data ) )
+                    return true;
+                break;
+            case 'b' :
+            case 'i' :
+            case 'd' :
+                if ( preg_match( "/^{$badions[1]}:[0-9.E-]+;\$/", $data ) )
+                    return true;
+                break;
+        }
+        return false;
+    }
 //Loop through code blocks in order image, album then gallery for price listing
 $codearray = array(($_zp_current_image->getCodeblock()), ($_zp_current_album->getCodeblock()), ($_zp_gallery->getCodeblock()));
-$value = "a:0:{}";
-$valid = true;
 foreach($codearray as $element) {
-if ($element == $value || (empty($element))){
-//echo "not code";
+if (is_serialized($element)) {
+//echo 'true'.$codearray[0][7];
 } else {
-$getcodeblock  = $element; //Load code block
-break; //found the first codeblock
+//echo 'false';
 }
+//echo $element.'</br>';
+if ($element == "a:0:{}" ||(empty($element))){
+//no current pricelist
+  //echo $element.'</br>';
+} else {
+$getcodeblock = $element; //Load code block
+  //echo $getcodeblock.'</br>';
+break; //found the first pricelist
+}
+//echo $element.'</br>';
 }
 
 if ($getcodeblock) {
 $codeblock = unserialize($getcodeblock);
 @eval('/>'.$codeblock[$number]);
 foreach ($codeblock as $value) {
-$pricelist = explode("|", $value);
-//echo $getcodeblock; 
+$pricecount = explode("|", $value);
+$pl = (getPriceList($value));
+
 ?>
 <div class="zensimpleprice">
 <div class="simpleCart_shelfItem">
 <div class="item_name" style="display:none"><?php echo $file_name; ?></div>
 <div id="pricedesc" class="item_description" style="display:none"></div> <!--DESCRIPTION TODO-->
-<div><h1 id="priceshow">$0</h1></div> <!--Show price TODO add option pricing-->  
+
+<span><h1 id="priceshow">$0</h1> <!--Show price TODO add option pricing--> 
+ 
+<?php if (getOption('zensimplecart_layoutstyle')==false) { ?>
+<span class="add-cart-msg" id="add-cart-msg"></span>
+<?php } ?>
 <div class="selectitems">
 	<!--create selection values-->
-<div class="selectprice">	
+<div class="selectprice">
 <select id="priceselect" class="item_price" onchange="getinfo()">
 <option value="0">choose option</option>
-<?php for ($i = 0; $i < count(getPriceList($value).'['."price". ']'); ++$i) {
-$price = getPriceList($value).'['."price". ']['.$i.']';  
-$price = getPriceList($value).'['."price". ']['.$i.']';
+<?php 
+for ($i = 0; $i < count($pricecount); ++$i) {
+$price = $pl['price'.$i];
+$desc = $pl['desc'.$i]; 
 ?>
 <option value="<?php echo $price; ?>"><?php echo $desc; ?></option>
+<?php  } ?>
+</select>
+<?php if (getOption('zensimplecart_layoutstyle')==false) { ?>
+<input type="button" id="additem" name="additem" class="item_add button button_accent addPrice" value="Add to cart" />
 <?php } ?>
-</select></div> <br /> </div><!--
-void printCustomSizedImageMaxSpace( [string $alt = ''], int $width, int $height, [string $class = NULL], [string $id = NULL], [ $thumb = false]  )
-printCustomSizedImage(getImageTitle(), 150, 150, 150, 150, 150, 0, -10, null, null, false); <div class="item_thumb"><?php //printCustomSizedImage(getImageTitle(), 150, 150,null, null, null, null, getImageTitle(), null, false); ?></div>
+</p></div> <br /> </div>
 
--->
-<?php printCustomSizedImageMaxSpace(getImageTitle(),150,150,$class='itemthumb'); ?>	
-<p><input type="button" class="item_add button button_accent addProduct" value="Add to cart" /></p>
-</div>
+<?php if (getOption('zensimplecart_layoutstyle')) { ?>
+<?php printCustomSizedImageMaxSpace(getImageTitle(),150,150,$class='itemthumb'); ?>
+<p><input type="button" id="additem" class="item_add button button_accent addProduct" value="Add to cart" onclick="atc()" /></p>
+<?php } ?>
+
+</span>
 </div>
 
 <!-- Pseudo User Information Box -->
