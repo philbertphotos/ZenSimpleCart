@@ -296,7 +296,6 @@ function getCompleteCodeblock($number=0) {
 	$codeblock = unserialize($getcodeblock);
 	return $codeblock[$number];
 }
-
 	function handleOption($key, $cv) {
 		$imageurl = getOption('text_watermark_text');
 		if (!empty($imageurl)) {
@@ -408,7 +407,8 @@ if (is_serialized($element)) {
 //echo 'false';
 }
 //echo $element.'</br>';
-if ($element == "a:0:{}" ||(empty($element))){
+$elementpos = strpos($element, 'a:3:{i:');
+if ($element == "a:0:{}" || ($elementpos > 0) || (empty($element))){
 //no current pricelist
   //echo $element.'</br>';
 } else {
