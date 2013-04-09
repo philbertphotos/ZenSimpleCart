@@ -16,6 +16,21 @@
                     });
                 });
             });
+				$(document).ready( function(){
+                $('.addPrice').each(function(){
+					var h1 = $('span').find('h1:first');
+                    $(this).click(function(){
+                        flyToElement($(h1), $('#basket'));
+                    });
+ 
+                });
+                $('.removePrice').each(function(){
+                    var h1 = $('span').find('h1:first');
+                    $(this).click(function(){
+                        flyFromElement($(h1), $('#basket'));
+                    });
+                });
+            });
 	/* ---------------------------------------------------------------------- */
 	/*	Cart Popup
 	/* ---------------------------------------------------------------------- */	
@@ -36,17 +51,57 @@ $(document).ready(function() {
 
 
 /* ---------------------------------------------------------------------- */
-	/* Set Cart options for checkout
+	/* Set Cart options 
 	/* ---------------------------------------------------------------------- */	
-function getinfo()
-{
+function getinfo(){
+
 
 } 
+if(typeof additem!='undefined'){
+
+additem.onclick=function() {
+        $('.add-cart-msg').hide()
+                          .addClass('success')
+                          .html('Item added to cart!')
+						$("#add-cart-msg").fadeIn()
+						 setTimeout(fadeOut, 5000);
+				 
+}
+}
+function fadeIn(elementToFade){
+            var element = document.getElementById(elementToFade);
+
+            element.style.opacity = parseFloat(element.style.opacity) + 0.1;
+            if(element.style.opacity > 1.0) {
+                element.style.opacity = 1.0;
+            } else {
+                setTimeout("fadeIn(\"" + elementToFade + "\")", 5000);
+}
+}
+function fadeOut()
+        {
+          $("#add-cart-msg").fadeOut()
+        }
+		
+$(window).load(function(){
+    // full load set to selected object.
+		$("#pricedesc").text ($('#priceselect option:selected').text());
+		$("#priceshow").text ("$" + ($('#priceselect option:selected').val()));
+});
 	$("document").ready(function(){
-   
+   	var ps = document.getElementById('priceshow');
           $("#priceselect").change(function(){
 		  $("#pricedesc").text ($('#priceselect option:selected').text());
-		  $("#priceshow").text ("$" + ($(this).val())); 
+		  $("#priceshow").text ("$" + ($(this).val()));
+		  
+if (ps.value == '$0' )  {
+	document.getElementById("additem").disabled = true;
+		//alert ('diable');
+}else {
+	document.getElementById("additem").enabled = true;
+	//alert ('enable');
+  }
+		  
         });    
     });
 	/* ---------------------------------------------------------------------- */
@@ -75,6 +130,7 @@ simpleCart.bind( 'beforeCheckout' , function( data ){
                         }, 1200)
                     })
                 })*/
+						  
 $("#lightbox_close").live("click", function () {
 	$("#info_box").fadeOut("fast"), $("#info_box_shadow").removeClass("display")
 });
