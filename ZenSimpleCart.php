@@ -16,7 +16,7 @@
 $plugin_is_filter = 9|THEME_PLUGIN;
 
 $plugin_author = "Joseph Philbert";
-$plugin_version = '2.1';
+$plugin_version = '2.2';
 $plugin_URL = 'http://philbertphotos.github.com/ZenSimpleCart';
 $plugin_description = gettext("Integrates a shopping basket/cart into Zenphoto CMS that uses Simplecart.js which allows you to turn your gallery into a shop for selling your images.");
 
@@ -73,19 +73,10 @@ if ($option == 'zensimplecart_update') {
 	}
 
 	function getOptionsSupported() {
-		return array(															
-	gettext('Checkout Type') => array('key' => 'zensimplecart_checkout', 'type' => OPTION_TYPE_SELECTOR,
-										'order'=>0,
-										'selections' => array(
-										gettext('PayPal') => 'PayPal', 
-										gettext('GoogleCheckout') => 'GoogleCheckout',
-										gettext('Amazon Payments') => 'AmazonPayments'),
-										
-										'desc' => gettext('Choose a payment type.')),
-										
+		return array(
 	gettext('Layout Style') => array(
 										'key' => 'zensimplecart_layoutstyle',
-										'order'=>1,
+										'order'=>0,
 										'type' => 5,
 										'selections' => array(
 										gettext('Simple') => 0,
@@ -95,31 +86,44 @@ if ($option == 'zensimplecart_update') {
 										
 	gettext('CSS Style') => array('key' => 'zensimplecart_css', 
 										'type' => OPTION_TYPE_SELECTOR, 
-										'order' => 3,
+										'order' => 1,
 										'selections' => array(gettext('dark') => 'darkcart.css', gettext('light') => 'lightcart.css'),
 										'desc' => gettext('Select a dark or light overall color style for your cart')),
+		
+	gettext('Checkout Type') => array('key' => 'zensimplecart_checkout', 'type' => OPTION_TYPE_SELECTOR,
+										'order'=>2,
+										'selections' => array(
+										gettext('PayPal') => 'PayPal', 
+										gettext('GoogleCheckout') => 'GoogleCheckout',
+										gettext('Amazon Payments') => 'AmazonPayments'),
 										
-	gettext('Paypal: Email ') => array('key' => 'zensimplecart_email','
-										order'=> 2, 
+										'desc' => gettext('Choose a payment type.')),
+																				
+	gettext('Paypal: Email ') => array('key' => 'zensimplecart_email',
+										'order'=> 3, 
 										'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Enter your paypal email address.")),	
 										
-	gettext('Amazon: Merchant Signature') => array('key' => 'zensimplecart_asignature', 
+	gettext('Amazon: Merchant Signature') => array('key' => 'zensimplecart_asignature',
+										'order'=> 4,	
 										'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Enter merchant Signature.")),
-	gettext('Amazon: ID') => array('key' => 'zensimplecart_aid', 
+	gettext('Amazon: ID') => array('key' => 'zensimplecart_aid',
+										'order'=> 5,	
 										'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Enter your Amazon.")),										
-	gettext('Amazon: Access Key ID ') => array('key' => 'zensimplecart_akey_id', 
+	gettext('Amazon: Access Key ID ') => array('key' => 'zensimplecart_akey_id',
+										'order'=> 6,	
 										'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Enter your amazon access key ID.")),		
-	gettext('Google: Merchant ID') => array('key' => 'zensimplecart_gid', 
+	gettext('Google: Merchant ID') => array('key' => 'zensimplecart_gid',
+										'order'=> 7,	
 										'type' => OPTION_TYPE_TEXTBOX,
 										'desc' => gettext("Enter your google merchant ID.")),	
 	
 	gettext('Currency') => array('key' => 'zensimplecart_currency', 
 										'type' => OPTION_TYPE_SELECTOR,
-										'order'=> 4,
+										'order'=> 8,
 										'selections' => array(
 			gettext('US Dollar') => 'USD', 
 			gettext('Australian Dollar') => 'AUD', 
@@ -138,7 +142,12 @@ if ($option == 'zensimplecart_update') {
 			gettext('Thai Baht') => 'THB',
 			gettext('Bitcoin') => 'BTC'),
 			
-	        'desc' => gettext('Select the currency type')),		
+	        'desc' => gettext('Select the currency type')),	
+	gettext(' Flat Shipping Rate') => array('key' => 'zensimplecart_flatship', 'type' => OPTION_TYPE_TEXTBOX,
+											'order'=> 9,
+											'desc' => gettext("Enter your flatshiping rate")),
+
+			
 		);
 	}
 }
